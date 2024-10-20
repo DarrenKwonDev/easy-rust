@@ -21,6 +21,7 @@ cargo watch -x run
 
 ```text
 [String]
+https://doc.rust-lang.org/std/string/struct.String.html  
 힙에 할당된 문자열로, 소유권을 가집니다. 변수가 스코프를 벗어나면 자동으로 메모리가 해제됩니다.
 소유권 규칙에 따라 관리됩니다.
 
