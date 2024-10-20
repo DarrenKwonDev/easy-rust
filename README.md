@@ -26,9 +26,11 @@ cargo watch -x run
 
 [&str]
 문자열 슬라이스로, 다른 문자열 데이터(String이나 정적 문자열)를 참조합니다. 소유권이 없습니다.
+&str은 포인터네? 실제 문자 배열은 힙에 있고, 포인터만 스택에 있는거지
 명시적인 라이프타임 지정이 필요할수도 있음
 
 [변환]
 String에서 &str로: &를 사용하여 쉽게 변환 가능 (&String은 &str로 자동 변환)
 &str에서 String으로: to_string() 또는 String::from()을 사용
 ```
+
