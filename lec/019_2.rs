@@ -1,9 +1,7 @@
 fn main() {
     let a = "asdf";
-    let b = &mut a;
-
+    let b = &a;
 
     let a = 3; // a shadowing
-    b = "abb"; // ?? 안 먹네?
-    println!("{}, {}", b, a); // b가 아직 살아 있다!
+    println!("{}, {}", b, a); // asdf, 3 즉, b가 아직 살아 있다! 
 }
