@@ -38,7 +38,7 @@ String에서 &str로: &를 사용하여 쉽게 변환 가능 (&String은 &str로
 &str에서 String으로: to_string() 또는 String::from()을 사용
 ```
 
-## ref
+## reference
 
 ```
 & : immutable ref, shared ref, immutable borrow
