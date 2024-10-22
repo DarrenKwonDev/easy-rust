@@ -54,7 +54,6 @@ cargo watch -x run
 
 ## others
 
-```text
 [String]
 https://doc.rust-lang.org/std/string/struct.String.html  
 힙에 할당된 문자열로, 소유권을 가집니다. 변수가 스코프를 벗어나면 자동으로 메모리가 해제됩니다.
@@ -68,4 +67,10 @@ https://doc.rust-lang.org/std/string/struct.String.html
 [변환]
 String에서 &str로: &를 사용하여 쉽게 변환 가능 (&String은 &str로 자동 변환)
 &str에서 String으로: to_string() 또는 String::from()을 사용
-```
+
+[enum, variant]
+
+[traits]
+- 어떤 type은 특정한 traits를 implements 한다.
+  - OOP에서 어떤 클래스가 특정한 interface를 구현하는 것과 같은 꼴이다.
+
