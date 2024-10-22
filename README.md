@@ -22,8 +22,22 @@ cargo watch -x run
 7. match는 타입이 가능한 모든 경우의 수를 exhaustive하게 처리해야 함.
 
 
-## reference
 
+## concepts
+
+### String, &str
+https://doc.rust-lang.org/std/string/struct.String.html  
+힙에 할당된 문자열로, 소유권을 가집니다. 변수가 스코프를 벗어나면 자동으로 메모리가 해제됩니다.
+소유권 규칙에 따라 관리됩니다.
+
+문자열 슬라이스로, 다른 문자열 데이터(String이나 정적 문자열)를 참조합니다. 소유권이 없습니다.
+&str은 포인터네? 실제 문자 배열은 힙에 있고, 포인터만 스택에 있는거지
+명시적인 라이프타임 지정이 필요할수도 있음
+
+String에서 &str로: &를 사용하여 쉽게 변환 가능 (&String은 &str로 자동 변환)
+&str에서 String으로: to_string() 또는 String::from()을 사용
+
+### reference
 ```
 & : immutable ref, shared ref, immutable borrow
 &mut : mutable ref, unique ref, mutable borrow
@@ -36,9 +50,7 @@ cargo watch -x run
   - 어떤 변수에 대해서 가변 참조와 불변 참조 둘 다 가질 순 없음. 둘 중 하나만 가능
 - 어떤 변수 shadowing을 하더라도 해당 변수의 ref는 살아 있음.
 
-
-## Sized vs DST
-
+### Sized vs DST
 - 러스트에서는 크게 두 타입 존재
   - 정적 크기 타입 (Sized types): 컴파일 시점에 크기를 알 수 있는 타입
     - String 
@@ -51,30 +63,27 @@ cargo watch -x run
 
 - Sized 타입은 스택에 직접 저장될 수 있지만, DST는 항상 간접적으로 (참조나 포인터를 통해) 다루어집니다.
 
+### struct
 
-## others
+```rs
+struct FileDir;           // empty struct
+struct Color(u8, u8, u8); // tuple struct
+// named struct
+struct Country {
+    pop: u32,
+    capital: String,
+    leader_name: String
+}
+```
 
-[String]
-https://doc.rust-lang.org/std/string/struct.String.html  
-힙에 할당된 문자열로, 소유권을 가집니다. 변수가 스코프를 벗어나면 자동으로 메모리가 해제됩니다.
-소유권 규칙에 따라 관리됩니다.
+### enum, variant
 
-[&str]
-문자열 슬라이스로, 다른 문자열 데이터(String이나 정적 문자열)를 참조합니다. 소유권이 없습니다.
-&str은 포인터네? 실제 문자 배열은 힙에 있고, 포인터만 스택에 있는거지
-명시적인 라이프타임 지정이 필요할수도 있음
-
-[변환]
-String에서 &str로: &를 사용하여 쉽게 변환 가능 (&String은 &str로 자동 변환)
-&str에서 String으로: to_string() 또는 String::from()을 사용
-
-[enum, variant]
-
-[traits]
+### traits
 - 어떤 type은 특정한 traits를 implements 한다.
   - OOP에서 어떤 클래스가 특정한 interface를 구현하는 것과 같은 꼴이다.
 
-[range]
+### range
+
 ```
 6..=10    // 6,7,8,9,10 (포함적 범위: 시작과 끝 모두 포함)
 6...10    // 6..=10과 동일하지만 deprecated됨
