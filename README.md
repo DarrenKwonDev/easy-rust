@@ -29,9 +29,10 @@ cargo watch -x run
 ### String, &str
 
 String
-https://doc.rust-lang.org/std/string/struct.String.html  
-힙에 할당된 문자열로, 소유권을 가집니다. 변수가 스코프를 벗어나면 자동으로 메모리가 해제됩니다.
+- https://doc.rust-lang.org/std/string/struct.String.html  
+- 힙에 할당된 문자열로, 소유권을 가집니다. 변수가 스코프를 벗어나면 자동으로 메모리가 해제됩니다.
 소유권 규칙에 따라 관리됩니다.
+- String은 항상 24바이트임. 실세 문자열은 heap 저장되고, heap을 가리키는 포인트(8) + len(8) + cap(8) 다 합쳐서 24바이트.
 
 &str
 문자열 슬라이스로, 다른 문자열 데이터(String이나 정적 문자열)를 참조합니다. 소유권이 없습니다.
@@ -118,6 +119,10 @@ fn main() {
 ```
 
 ### enum, variant
+
+- Enum은 variant소유
+  - 예를 들어 Result enum에는 OK, Err variant 존재
+  - 각 variant에 대한 match 키워드로 핸들링 가능.
 
 ```rust
 // 데이터가 없는 기본 형태 (전통적인 enum과 비슷)
