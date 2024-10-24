@@ -20,16 +20,20 @@ cargo watch -x run
 5. Copy 트레이트를 구현하지 않은 타입 (예: String, Vec)은 인자로 넘겨도 값 복사는 일어나지 않고, 소유권만 이동합니다.
 6. empty tuple = () = unit type
 7. match는 타입이 가능한 모든 경우의 수를 exhaustive하게 처리해야 함.
+8. 얕은 복사와 move는 다르다. 얕은 복사는 객체의 포인터만 복사해가는가고 무브는 얕은 복사와 같은데 다만 이전 객체를 무효화하는 것이다
 
 
 
 ## concepts
 
 ### String, &str
+
+String
 https://doc.rust-lang.org/std/string/struct.String.html  
 힙에 할당된 문자열로, 소유권을 가집니다. 변수가 스코프를 벗어나면 자동으로 메모리가 해제됩니다.
 소유권 규칙에 따라 관리됩니다.
 
+&str
 문자열 슬라이스로, 다른 문자열 데이터(String이나 정적 문자열)를 참조합니다. 소유권이 없습니다.
 &str은 포인터네? 실제 문자 배열은 힙에 있고, 포인터만 스택에 있는거지
 명시적인 라이프타임 지정이 필요할수도 있음
@@ -43,6 +47,8 @@ String에서 &str로: &를 사용하여 쉽게 변환 가능 (&String은 &str로
 &mut : mutable ref, unique ref, mutable borrow
 ```
 
+- Ref를 만드는 행위는 borrow라 함. 
+- Ref도 스코프 벗어나면 없어짐
 - 가변 참조가 존재하는 동안에는 원본 변수를 직접 수정할 수 없음.
 - 어떤 시점에서 하나의 가변 참조(&mut T) 또는 여러 개의 불변 참조(&T)를 가질 수 있지만, 둘을 동시에 가질 수는 없습니다.
   - 어떤 변수의 가변 참조는 한개만 가질 수 있음
@@ -63,6 +69,10 @@ String에서 &str로: &를 사용하여 쉽게 변환 가능 (&String은 &str로
 
 - Sized 타입은 스택에 직접 저장될 수 있지만, DST는 항상 간접적으로 (참조나 포인터를 통해) 다루어집니다.
 
+### slice
+
+- 슬라이스는 컨테이너의 참조이자 원본 컨테이너에 대한 소유권은 없음
+
 ### struct
 
 ```rs
@@ -76,7 +86,86 @@ struct Country {
 }
 ```
 
+```rust
+struct SeaCreature {
+    animal_type: String,
+    name: String,
+    arms: i32,
+    legs: i32,
+    weapon: String,
+}
+
+fn main() {
+    
+    // --------------------
+    // stack
+    // heap
+    // data
+    // code
+    // --------------------
+
+    // SeaCreature의 데이터는 stack에 있음
+    let ferris = SeaCreature {
+        // String struct도 stack에 있지만,
+        // heap에 있는 데이터에 대한 참조를 갖고 있음
+        animal_type: String::from("게"),
+        name: String::from("Ferris"), // data 영역에 저장
+        arms: 2,
+        legs: 4,
+        weapon: String::from("집게"), // data 영연ㄱ에 저장
+    };
+}
+```
+
 ### enum, variant
+
+```rust
+// 데이터가 없는 기본 형태 (전통적인 enum과 비슷)
+enum Basic {
+    RED,
+    GREEN,
+    BLUE
+}
+
+// 데이터를 가질 수 있는 형태
+enum Message {
+    Quit,                          // 데이터 없음
+    Move { x: i32, y: i32 },      // 구조체 스타일
+    Write(String),                 // 단일 값
+    ChangeColor(i32, i32, i32)    // 여러 값
+}
+```
+
+```rust
+
+// rust의 enum 메모리 모델은 "tagged union"
+// 메모리 모델 중 0은 미사용, 1은 사용이라 가정할 때 다음과 같음
+// 가장 긴 String 을 기반으로 다음과 같이 구성됨.
+// 즉, 어느 enum 데이터를 사용하던지 (가장 긴 자료형의 크기 + 1[tag]) 만큼의 비트를 사용함.
+enum Message {
+    Quit,                       // 데이터 없음
+                                // [00000000] | [미사용 24바이트          ]
+                                // 태그:0   [        미사용 데이터        ]
+  
+    Move { x: i32, y: i32 },    // 8바이트 (i32 두개) 
+                                // [00000001] | [8바이트][미사용 16바이트 ]
+                                // 태그:1   [  x,y 데이터  ][   미사용   ]
+                                // 태그 포함 총 25비트
+
+    Write(String),              // 24바이트 (String)
+                                // [00000010] | [String의 24바이트 메모리]
+                                // 태그:2   [       String 데이터        ]
+                                // 태그 포함 25바이트
+
+    ChangeColor(i32, i32, i32)  // 12바이트 (i32 세개)
+                                // [00000011] | [12 바이트][미사용 12바이트]
+                                // 태그:3   [   r,g,b 데이터  ][미사용  ]
+}
+
+fn main() {
+    let a = Message::Quit; // 25바이트를 사용함.
+}
+```
 
 ### traits
 - 어떤 type은 특정한 traits를 implements 한다.
