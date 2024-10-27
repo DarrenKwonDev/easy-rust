@@ -73,6 +73,8 @@ String에서 &str로: &를 사용하여 쉽게 변환 가능 (&String은 &str로
 ### slice
 
 - 슬라이스는 컨테이너의 참조이자 원본 컨테이너에 대한 소유권은 없음
+- 슬라이스(slice) - 런타임에 길이가 정해지는 유사한 원소들의 collection
+- str(문자열 slice) - 런타임에 길이가 정해지는 텍스트
 
 ### struct
 
@@ -175,6 +177,14 @@ fn main() {
 ### traits
 - 어떤 type은 특정한 traits를 implements 한다.
   - OOP에서 어떤 클래스가 특정한 interface를 구현하는 것과 같은 꼴이다.
+
+### impl
+
+- 러스트에서 impl은 struct와 enum 둘 다에다 사용할 수 있음
+- &self를 받으면 메서드 아니면 연관함수
+  - Rust에서 self 매개변수는 반드시 메서드의 첫 번째 매개변수여야 합니다. 두 번째나 다른 위치에 넣으면 컴파일 에러가 발생합니다
+  - 일반적인 메서드는 인스턴스에서 점(.) 표기법으로 호출하는 반면, 연관 함수는 타입 이름과 함께 이중 콜론(::)을 사용해 호출합니다.
+    - Type::Something은 연관함수, Type.method() 는 메서드.
 
 ### range
 
