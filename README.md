@@ -187,6 +187,11 @@ fn main() {
     - Type::Something은 연관함수, Type.method() 는 메서드.
 - dot operator는 알아서 필요한 만큼 dereferencing 한다.
 
+### generic
+
+typescript와 매우 유사한 편임... 
+
+
 ### range
 
 ```
