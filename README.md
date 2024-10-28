@@ -185,6 +185,7 @@ fn main() {
   - Rust에서 self 매개변수는 반드시 메서드의 첫 번째 매개변수여야 합니다. 두 번째나 다른 위치에 넣으면 컴파일 에러가 발생합니다
   - 일반적인 메서드는 인스턴스에서 점(.) 표기법으로 호출하는 반면, 연관 함수는 타입 이름과 함께 이중 콜론(::)을 사용해 호출합니다.
     - Type::Something은 연관함수, Type.method() 는 메서드.
+- dot operator는 알아서 필요한 만큼 dereferencing 한다.
 
 ### range
 
@@ -195,4 +196,26 @@ fn main() {
 ..10      // 0,1,2,...,9 (시작점 생략, 0부터 시작)
 6..       // 6부터 타입의 최대값까지
 ..        // 전체 범위
+```
+
+### package, creates, modules
+
+- Cargo.toml 하나당 package 1개
+- package는 하나 이상의 creates로 구성됨. (bin|lib)creates
+- 코드 내 응집력을 위해 module이 존재함. (js module system과 비슷함)
+
+- 현재 프로젝트 내의 모듈은 crate 이하에 존재함.
+- 외부 create는 자체적으로 use tokio::runtime 꼴이고
+- std 는 use std::collections::HashMap 꼴임.
+- super:: 는 상위 모듈을 가리키는 상대 경로임
+- 일반적으로 선호하는 경로는 절대 경로입니다. 아이템을 정의하는 코드와 호출하는 코드는 분리되어 있을 가능성이 높기 때문입니다.
+
+- 구조체 정의에 pub를 쓰면 구조체는 공개되지만, 구조체의 필드는 비공개로 유지됩니다.  공개 여부는 각 필드마다 정할 수 있습니다.
+- 열거형은 공개로 지정할 경우 모든 배리언트가 공개됩니다
+
+```rust
+
+use std::io::Result as IoResult; // alias 가능
+use std::{cmp::Ordering, io}; // 중첩 use
+use std::collections::*; // glob 연산 가능
 ```
