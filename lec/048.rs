@@ -21,4 +21,6 @@ fn main() {
         Ok(_) => println!("ok"),
         Err(_) => println!("err"),
     }
+
+    variable.unwrap(); // err의 경우 panic!
 }

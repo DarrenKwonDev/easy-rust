@@ -224,3 +224,9 @@ use std::io::Result as IoResult; // alias 가능
 use std::{cmp::Ordering, io}; // 중첩 use
 use std::collections::*; // glob 연산 가능
 ```
+
+### error
+
+- Recoverable error: 발생해도 프로그램은 정상 실행 가능한 에러. Result 타입으로 처리하며 match, ? 연산자 등으로 에러 핸들링
+- Unrecoverable error: 발생하면 바로 뻗는 에러. panic! 매크로를 통해 처리
+- RUST_BACKTRACE=1 cargo run panic! 발생시 backtrace 하기 위해 환경변수를 일시적으로 바꿔보자.
