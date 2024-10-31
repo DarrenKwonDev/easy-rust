@@ -125,6 +125,7 @@ fn main() {
 - Enum은 variant소유
   - 예를 들어 Result enum에는 OK, Err variant 존재
   - 각 variant에 대한 match 키워드로 핸들링 가능.
+- match 외에 if let, while let 을 사용하여 간단하게 원하는 것만 처리 가능.
 
 ```rust
 // 데이터가 없는 기본 형태 (전통적인 enum과 비슷)
