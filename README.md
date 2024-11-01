@@ -234,7 +234,7 @@ use std::collections::*; // glob 연산 가능
 
 ### [collections](https://doc.rust-lang.org/std/collections/index.html)
 
-Sequences: Vec, VecDeque, LinkedList
+Sequences: Vec, VecDeque(ring buffer), LinkedList
 Maps: HashMap, BTreeMap
 Sets: HashSet, BTreeSet
-Misc: BinaryHeap
+Misc: BinaryHeap(최대 힙)
