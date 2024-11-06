@@ -248,3 +248,22 @@ Sequences: Vec, VecDeque(ring buffer), LinkedList
 Maps: HashMap, BTreeMap
 Sets: HashSet, BTreeSet
 Misc: BinaryHeap(최대 힙)
+
+
+### lifetime
+
+- 라이프타임의 주목적은 댕글링 참조 (dangling reference) 방지입니다
+- 라이프타임을 명시한다고 해서 참조자의 수명이 바뀌진 않습니다. 그보다는 여러 참조자에 대한 수명에 영향을 주지 않으면서 서로 간 수명의 관계가 어떻게 되는지에 대해 기술하는 것입니다
+
+- 라이프타임 생략 규칙 (lifetime elision rules)
+  - 첫 번째 규칙은, 컴파일러가 참조자인 매개변수 각각에게 라이프타임 매개변수를 할당한다는 것입니다. fn foo<'a, 'b>(x: &'a i32, y: &'b i32)처럼 매개변수가 두 개인 함수는 두 개의 개별 라이프타임 매개변수
+  - 두 번째 규칙은, 만약 입력 라이프타임 매개변수가 딱 하나라면, 해당 라이프타임이 모든 출력 라이프타임에 대입된다는 것입니다: fn foo<'a>(x: &'a i32) -> &'a i32처럼 말이지요.
+  - 세 번째 규칙은, 입력 라이프타임 매개변수가 여러 개인데, 그중 하나가 &self나 &mut self라면, 즉 메서드라면 self의 라이프타임이 모든 출력 라이프타임 매개변수에 대입됩니다. 
+
+### etc
+
+
+wrapping: 범위를 넘어가면 처음/끝으로 돌아감
+saturating: 범위를 넘어가면 최대/최소값에 고정됨
+as casting은 Use it exclusively for going from a smaller type to a larger type (업 캐스팅)
+큰 것을 작은것으로 casting할 땐 TryFrom and TryInto 을 사용하라. (다운 캐스팅)
