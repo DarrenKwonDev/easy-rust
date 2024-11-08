@@ -60,12 +60,22 @@ String에서 &str로: &를 사용하여 쉽게 변환 가능 (&String은 &str로
 
 - Ref를 만드는 행위는 borrow라 함. 
 - Ref도 스코프 벗어나면 없어짐
-- 가변 참조가 존재하는 동안에는 원본 변수를 직접 수정할 수 없음.
+
+- 소유권 목표 : 읽던기, 바꾸던지 둘 중 하나만 가능.
+  - Data is never mutated while it's being read
+  - Data is never read while it's being mutated
+  - 이 원칙에 따라, `가변 참조가 존재하는 동안에는 원본 변수를 직접 수정할 수 없음.`
 - 어떤 시점에서 하나의 가변 참조(&mut T) 또는 여러 개의 불변 참조(&T)를 가질 수 있지만, 둘을 동시에 가질 수는 없습니다.
   - 어떤 변수의 가변 참조는 한개만 가질 수 있음
   - 어떤 변수의 불변 참조는 여러개 가질 수 있음
   - 어떤 변수에 대해서 가변 참조와 불변 참조 둘 다 가질 순 없음. 둘 중 하나만 가능
 - 어떤 변수 shadowing을 하더라도 해당 변수의 ref는 살아 있음.
+
+
+- 메서드의 첫 인자로 self 를 넣을 때도 고려해야.
+  - 인스턴스를 변환하거나 소비해야 하는 경우 -> self
+  - 데이터를 읽기만 하는 경우 -> &self
+  - 데이터를 수정해야 하는 경우 -> &mut self
 
 ### Sized vs DST
 - 러스트에서는 크게 두 타입 존재
@@ -189,14 +199,52 @@ fn main() {
 - 어떤 type은 특정한 traits를 implements 한다.
   - OOP에서 어떤 클래스가 특정한 interface를 구현하는 것과 같은 꼴이다.
 
+### blanket traits impl
+
+특정 트레이트를 구현한 모든 타입에 대한 impl
+
+```rust
+// T가 특정 트레이트를 구현한 모든 타입에 대해
+impl<T: SomeTrait> OtherTrait for T {
+    // OtherTrait 구현
+}
+```
+
 ### impl
 
 - 러스트에서 impl은 struct와 enum 둘 다에다 사용할 수 있음
-- &self를 받으면 메서드 아니면 연관함수
+
+- 앞에 self를 받으면 메서드 아니면 연관함수
   - Rust에서 self 매개변수는 반드시 메서드의 첫 번째 매개변수여야 합니다. 두 번째나 다른 위치에 넣으면 컴파일 에러가 발생합니다
   - 일반적인 메서드는 인스턴스에서 점(.) 표기법으로 호출하는 반면, 연관 함수는 타입 이름과 함께 이중 콜론(::)을 사용해 호출합니다.
     - Type::Something은 연관함수, Type.method() 는 메서드.
 - dot operator는 알아서 필요한 만큼 dereferencing 한다.
+
+
+### impl method
+
+- 메서드의 첫 인자로 self 를 넣을 때도 고려해야.
+  - 인스턴스를 변환하거나 소비해야 하는 경우 -> self
+  - 데이터를 읽기만 하는 경우 -> &self
+  - 데이터를 수정해야 하는 경우 -> &mut self
+
+- setter를 구현할 때 mut 혹은 &mut 둘 다 이점이 있음. 
+```rust
+// mut을 넘기면, self를 재반환하여 메서드 체이닝이 가능함
+impl Ticket {
+    pub fn set_title(mut self, new_title: String) -> Self {
+        self.title = new_title;
+        self
+    }
+}
+
+// 단순히 바꾸고 말거면 &mut
+impl Ticket {
+    pub fn set_title(&mut self, new_title: String) {
+        self.title = new_title;
+    }
+}
+```
 
 ### generic
 
