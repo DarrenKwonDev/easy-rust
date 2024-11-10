@@ -199,6 +199,15 @@ fn main() {
 - 어떤 type은 특정한 traits를 implements 한다.
   - OOP에서 어떤 클래스가 특정한 interface를 구현하는 것과 같은 꼴이다.
 
+- 특정 trait를 구현하면 몇가지 메서드가 자동구현되는 위계가 존재함.
+  - automatic implementation
+    - ToString을 직접 impl하기보다는 impl Display만 하면 .to_string()이 포함됨
+    - FromStr → parse() 메서드 자동 구현
+    - AsRef<T> → 여러 타입에 대한 참조 변환을 자동으로 처리 (특히 String, str, Path 관련 작업에서 자주 사용)
+    - From<T> 구현 → 자동으로 대응되는 Into<T> 구현됨 (이건 많이 사용되는 패턴이라 특별히 기억해두면 좋습니다)
+
+
+
 ### blanket traits impl
 
 특정 트레이트를 구현한 모든 타입에 대한 impl
