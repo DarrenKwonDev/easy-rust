@@ -207,6 +207,14 @@ fn main() {
     - From<T> 구현 → 자동으로 대응되는 Into<T> 구현됨 (이건 많이 사용되는 패턴이라 특별히 기억해두면 좋습니다)
 
 
+#### copy traits
+
+copy traits의 조건(https://rust-exercises.com/100-exercises/04_traits/12_copy.html)  
+
+- it must implement Clone (Clone : Copy)
+- The type doesn't manage any additional resources (e.g. heap memory, file handles, etc.) beyond the std::mem::size_of bytes that it occupies in memory.
+  - 이 점 때문에, Drop을 구현한 타입은 Copy를 구현할 수 없음. Drop은 메모리 정리를 하므로 Drop이 구현된 구조체는 스택에 지정된 것 외에 힙에 뭔가 저장해서 관리하고 있다는 점을 암시함.
+- The type is not a mutable reference (&mut T)
 
 ### blanket traits impl
 
@@ -216,6 +224,22 @@ fn main() {
 // T가 특정 트레이트를 구현한 모든 타입에 대해
 impl<T: SomeTrait> OtherTrait for T {
     // OtherTrait 구현
+}
+```
+
+### trait object
+
+- dyn키워드는 트레이트 객체를 나타내는 키워드
+- 
+```rust
+// Printable 트레이트를 구현하되, 연관 타입 Age 타입이 u32인 것만 받겠다.
+fn print_info(item: &dyn Printable<Age = u32>) {
+    item.print();
+}
+
+// Trait1과 Trait2 두 개 다 구현한 것만 인자로 받겠다.
+fn some_function(param: &(dyn Trait1 + Trait2)) {
+    // Function body
 }
 ```
 
@@ -316,6 +340,20 @@ Misc: BinaryHeap(최대 힙)
   - 첫 번째 규칙은, 컴파일러가 참조자인 매개변수 각각에게 라이프타임 매개변수를 할당한다는 것입니다. fn foo<'a, 'b>(x: &'a i32, y: &'b i32)처럼 매개변수가 두 개인 함수는 두 개의 개별 라이프타임 매개변수
   - 두 번째 규칙은, 만약 입력 라이프타임 매개변수가 딱 하나라면, 해당 라이프타임이 모든 출력 라이프타임에 대입된다는 것입니다: fn foo<'a>(x: &'a i32) -> &'a i32처럼 말이지요.
   - 세 번째 규칙은, 입력 라이프타임 매개변수가 여러 개인데, 그중 하나가 &self나 &mut self라면, 즉 메서드라면 self의 라이프타임이 모든 출력 라이프타임 매개변수에 대입됩니다. 
+
+### closure
+
+```rust
+let closure = || println!("{a}"); // 참조로 캡처
+
+let closure = move || println!("{s}"); // s의 소유권이 클로저로 이동
+
+let mut closure = || {
+    x += 1; // 가변 참조로 캡처
+    println!("{x}");
+};
+```
+
 
 ### etc
 
