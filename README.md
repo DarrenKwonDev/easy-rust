@@ -343,11 +343,20 @@ Misc: BinaryHeap(최대 힙)
 
 ### closure
 
+Rust의 클로저(closure) 트레잇에는 3가지가 있습니다:
+
+Fn: 여러 번 호출 가능, 캡처된 값을 공유 참조로 빌림
+FnMut: 여러 번 호출 가능, 캡처된 값을 가변 참조로 빌림
+FnOnce: 한 번만 호출 가능, 캡처된 값을 소유권 이전(move)
+
 ```rust
+// Fn - 불변 참조로 캡처
 let closure = || println!("{a}"); // 참조로 캡처
 
+// FnOnce - 소유권 이전 
 let closure = move || println!("{s}"); // s의 소유권이 클로저로 이동
 
+// FnMut - 가변 참조
 let mut closure = || {
     x += 1; // 가변 참조로 캡처
     println!("{x}");
@@ -357,7 +366,18 @@ let mut closure = || {
 
 ### etc
 
-wrapping: 범위를 넘어가면 처음/끝으로 돌아감
-saturating: 범위를 넘어가면 최대/최소값에 고정됨
-as casting은 Use it exclusively for going from a smaller type to a larger type (업 캐스팅)
+- wrapping: 범위를 넘어가면 처음/끝으로 돌아감
+- saturating: 범위를 넘어가면 최대/최소값에 고정됨
+- as casting은 Use it exclusively for going from a smaller type to a larger type (업 캐스팅)
 큰 것을 작은것으로 casting할 땐 TryFrom and TryInto 을 사용하라. (다운 캐스팅)
+- derive 매크로는 재귀적으로 작동합니다. 즉, derive 매크로를 구조체에 적용하면 그 구조체의 모든 필드들도 해당 기능을 구현하고 있어야 합니다
+- 제네릭은 암시적으로 Sized 트레이트 바운드가 설정됨. T : Sized  
+- DST 타입의 레퍼런스는 FAT pointer 라서, usize * 2 의 크기를 가짐. x64기준 16바이트. 예를 들어 &str, &[T], trait object(dyn Trait) 는 DST.  
+- Sized trait는 auto trait 이고, 별도 필수 메서드가 없는 Marker trait임.  
+- Deref trait를 통해서 deref coercion 가능  
+- match는 기본적으로 값을 소유(move)하려고 합니다
+
+
+
+- 일반적으로 많이 쓰이는 crates
+  - reqwest/tokio/serde/thiserror/anyhow/clap/ratatui
