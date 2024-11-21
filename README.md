@@ -66,9 +66,11 @@ String에서 &str로: &를 사용하여 쉽게 변환 가능 (&String은 &str로
   - Data is never read while it's being mutated
   - 이 원칙에 따라, `가변 참조가 존재하는 동안에는 원본 변수를 직접 수정할 수 없음.`
 - 어떤 시점에서 하나의 가변 참조(&mut T) 또는 여러 개의 불변 참조(&T)를 가질 수 있지만, 둘을 동시에 가질 수는 없습니다.
-  - 어떤 변수의 가변 참조는 한개만 가질 수 있음
-  - 어떤 변수의 불변 참조는 여러개 가질 수 있음
+  - 어떤 변수의 가변 참조는 한개만 가질 수 있음 (unique ref 같은 느낌)
+  - 어떤 변수의 불변 참조는 여러개 가질 수 있음 (shared ref 같은 느낌)
   - 어떤 변수에 대해서 가변 참조와 불변 참조 둘 다 가질 순 없음. 둘 중 하나만 가능
+  - &       immutable ref / shared ref
+  - &mut    mutable ref / unique ref
 - 어떤 변수 shadowing을 하더라도 해당 변수의 ref는 살아 있음.
 
 
@@ -76,6 +78,30 @@ String에서 &str로: &를 사용하여 쉽게 변환 가능 (&String은 &str로
   - 인스턴스를 변환하거나 소비해야 하는 경우 -> self
   - 데이터를 읽기만 하는 경우 -> &self
   - 데이터를 수정해야 하는 경우 -> &mut self
+
+
+### Interior Mutability Types
+
+interior mutability(내부 가변성) == 불변 참조(&)를 통해서도 내용을 변경할 수 있게 해주는 패턴
+
+Cell: 간단한 값 타입용
+RefCell: 단일 스레드에서 복잡한 타입용
+Mutex/RwLock: 멀티스레드 환경용
+Atomic: 고성능 멀티스레드 연산용
+OnceCell/OnceLock: 초기화 한 번만 필요한 경우
+
+### smart ptr?
+
+
+- 소유권 관련
+Box: 힙 메모리 할당
+Rc: 참조 카운팅
+Arc: 원자적 참조 카운팅 (스레드 안전)
+
+- 내부 가변성
+Cell, RefCell
+Mutex, RwLock
+Atomic 타입들
 
 ### Sized vs DST
 - 러스트에서는 크게 두 타입 존재
