@@ -90,8 +90,9 @@ Mutex/RwLock: 멀티스레드 환경용
 Atomic: 고성능 멀티스레드 연산용
 OnceCell/OnceLock: 초기화 한 번만 필요한 경우
 
-### smart ptr?
+### ptr
 
+- 레퍼런스(&) 도 포인터임.
 
 - 소유권 관련
 Box: 힙 메모리 할당
@@ -102,6 +103,8 @@ Arc: 원자적 참조 카운팅 (스레드 안전)
 Cell, RefCell
 Mutex, RwLock
 Atomic 타입들
+
+- rust에서도 원시 포인터가 존재하지만 unsafe 내에서만 역참조 가능.
 
 ### Sized vs DST
 - 러스트에서는 크게 두 타입 존재
@@ -399,11 +402,25 @@ let mut closure = || {
 - derive 매크로는 재귀적으로 작동합니다. 즉, derive 매크로를 구조체에 적용하면 그 구조체의 모든 필드들도 해당 기능을 구현하고 있어야 합니다
 - 제네릭은 암시적으로 Sized 트레이트 바운드가 설정됨. T : Sized  
 - DST 타입의 레퍼런스는 FAT pointer 라서, usize * 2 의 크기를 가짐. x64기준 16바이트. 예를 들어 &str, &[T], trait object(dyn Trait) 는 DST.  
+```rust
+&[T]       // 슬라이스 - (ptr, len)
+&str       // 문자열 슬라이스 - (ptr, len)
+&dyn Trait // 트레이트 객체 - (ptr, vtable_ptr)
+```
 - Sized trait는 auto trait 이고, 별도 필수 메서드가 없는 Marker trait임.  
 - Deref trait를 통해서 deref coercion 가능  
 - match는 기본적으로 값을 소유(move)하려고 합니다
-
+- bool은 1바이트, char는 4바이트. 
 
 
 - 일반적으로 많이 쓰이는 crates
   - reqwest/tokio/serde/thiserror/anyhow/clap/ratatui
+
+- 문서 읽을 때...
+  ```
+    associated contants : i32::... 꼴
+    methods : a.method(...) 꼴
+    Trait Implementations : 구현된 트레이트
+    Auto Trait Implementations : 컴파일러가 자동으로 구현해주는 트레이트들입니다
+    Blanket Implementations : 특정 트레이드를 구현한 타입에 자동적으로 구현되는 트레이트
+  ```
