@@ -73,7 +73,7 @@ String에서 &str로: &를 사용하여 쉽게 변환 가능 (&String은 &str로
   - &       immutable ref / shared ref
   - &mut    mutable ref / unique ref
 - 어떤 변수 shadowing을 하더라도 해당 변수의 ref는 살아 있음.
-
+- 참조의 종류와 관계없이 대여 중인 값의 원본을 수정할 수 없습니다.
 
 - 메서드의 첫 인자로 self 를 넣을 때도 고려해야.
   - 인스턴스를 변환하거나 소비해야 하는 경우 -> self
@@ -418,7 +418,7 @@ let mut closure = || {
 - Deref trait를 통해서 deref coercion 가능  
 - match는 기본적으로 값을 소유(move)하려고 합니다
 - bool은 1바이트, char는 4바이트. 
-
+- rust에서 let a = b 의 경우 => Copy trait를 구현하지 않은 경우 move 혹은 Copy traits 구현에 의한 copy
 
 - 일반적으로 많이 쓰이는 crates
   - reqwest/tokio/serde/thiserror/anyhow/clap/ratatui
