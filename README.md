@@ -408,6 +408,33 @@ let mut closure = || {
 
 ### 소유권 이전 주의
 
+(1) for 루프의 기본 동작
+
+```rust
+for item in collection  // collection의 소유권을 가져감
+```
+- 컬렉션의 소유권을 가져가고
+- 각 요소의 소유권도 item으로 이전됨
+
+(2) 참조로 순회할 때
+
+```rust
+for item in &collection  // &collection을 순회
+```
+- item은 각 요소의 참조 타입이 됨 (&T)
+- 컬렉션을 계속 사용할 수 있음
+
+(3) 참조 패턴 매칭
+
+```rust
+for &item in &collection
+```
+- &item은 "이 참조를 해제해서 item에 값을 바인딩하겠다"는 의미
+- item은 참조가 아닌 값 타입(T)이 됨
+
+
+여러 예시들을 보자.
+
 ```rust
 let vector = vec![String::from("hello"), String::from("world")];
 
