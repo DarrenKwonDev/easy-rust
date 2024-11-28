@@ -113,6 +113,12 @@ Atomic 타입들
 
 - rust에서도 원시 포인터가 존재하지만 unsafe 내에서만 역참조 가능.
 
+### Rc
+
+
+- fully qualified syntax
+  - rc.clone() 하지 말고 Rc::clone(&rc) 로 확실하게 RC 타입을 활용하고 있음을 보여야 함.
+
 ### Sized vs DST
 - 러스트에서는 크게 두 타입 존재
   - 정적 크기 타입 (Sized types): 컴파일 시점에 크기를 알 수 있는 타입
@@ -398,6 +404,21 @@ let mut closure = || {
     println!("{x}");
 };
 ```
+
+
+### 소유권 이전 주의
+
+```rust
+let vector = vec![String::from("hello"), String::from("world")];
+
+for x in vector {  // vector의 소유권이 이전되고
+    println!("{}", x);  // 각 String의 소유권도 x로 이전됩니다
+}  // x가 스코프를 벗어나면서 String도 drop됩니다
+
+// vector도 이미 소비되어 사용할 수 없고
+// vector 안의 String들도 이미 move되어 접근할 수 없습니다
+```
+
 
 
 ### etc
