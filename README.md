@@ -420,6 +420,21 @@ for x in vector {  // vector의 소유권이 이전되고
 ```
 
 
+```rust
+let vector = vec![1, 2, 3];
+
+// &elem은 참조 패턴이며, elem은 i32 타입
+for &elem in &vector {
+    println!("{}", elem); // elem만 썼으므로 &를 떼어낸 것이라고 이해하면 편함
+}
+
+// item은 &i32 타입의 참조
+for item in &vector {
+    println!("{}", item);
+}
+```
+
+
 
 ### etc
 
