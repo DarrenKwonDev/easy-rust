@@ -494,3 +494,9 @@ for item in &vector {
     Auto Trait Implementations : 컴파일러가 자동으로 구현해주는 트레이트들입니다
     Blanket Implementations : 특정 트레이드를 구현한 타입에 자동적으로 구현되는 트레이트
   ```
+
+
+- 커스텀 에러 정의할 때..
+  - 솔직히 좀 번거로움.
+  - 라이브러리를 만드는 경우: 구체적인 에러 타입을 정의하고 `thiserror` 사용
+  - 애플리케이션을 만드는 경우: `anyhow`를 사용하여 편리하게 에러 처리
